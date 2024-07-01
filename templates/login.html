@@ -1,0 +1,80 @@
+<html>
+<head>
+    <title>login</title>
+<link rel="icon" href="https://i.postimg.cc/NjRpXSm3/favicon-438.png" target="_blank" type="image/png" sizes="512x512">
+
+    <style>
+    body {
+background: url('https://th.bing.com/th/id/R.7dfa90c75a9df4362204e68f095be3a6?rik=viZCBEII3WZJyw&pid=ImgRaw&r=0');        
+        background-repeat: repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    overflow-y: hidden; /* Hide vertical scrollbar */
+
+        
+    }
+</style>
+<style>
+        
+        .login-container {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+
+        .login-form {
+            max-width: 1000px;
+            padding: 20px;
+            background: linear-gradient(to bottom, #0079BF, white);
+            background-color: rgba(240, 240, 240, 0.5); /* Semi-transparent background */
+            border-radius: 10px;
+        }
+
+        .login-form label {
+            font-weight: bold;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .login-form button {
+            background-color: #0e75b0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-form button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Login</h2>
+    <form action="/login" method="post">
+
+                <label for="ID">ID:</label>
+                <input type="text" id="ID" name="ID" placeholder="Enter your ID">
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password">
+
+            <button type="submit">Login</button>
+</form>
+        </div>
+    </div>
+
+</body>
+</head>

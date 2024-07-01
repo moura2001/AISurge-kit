@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://i.postimg.cc/NjRpXSm3/favicon-438.png" target="_blank" type="image/png" sizes="512x512">
+
+    <title>AISurge Kit - Welcome</title>
+    <style>
+        /* Base styles */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('https://th.bing.com/th/id/R.7dfa90c75a9df4362204e68f095be3a6?rik=viZCBEII3WZJyw&pid=ImgRaw&r=0') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+width:60%;
+height:60%;
+
+            background: linear-gradient(to bottom, #0079BF, white);
+            background-color: rgba(240, 240, 240, 0.5); /* Semi-transparent background */
+
+            padding: 2em;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-content h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+            background: #00f;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s infinite alternate, moveText 3s infinite alternate;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-content p {
+            color: #1B1A55;
+            font-size: 1.5em;
+            margin-top: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            animation: moveText 3s infinite alternate;
+        }
+
+        .login-container {
+            margin-top: 2em;
+            display: flex;
+            gap: 1em;
+        }
+
+        .login-container button {
+            padding: 0.5em 1em;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #007aff;
+            color: white;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease;
+        }
+
+        .login-container button:hover {
+            background: #005bb5;
+        }
+
+        /* Keyframe animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientShift {
+            from {
+                background-position: 0% 50%;
+            }
+
+            to {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes moveShapes {
+            from {
+                transform: translateX(0) translateY(0);
+            }
+
+            to {
+                transform: translateX(50px) translateY(50px);
+            }
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            to {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes moveText {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(20px);
+            }
+        }
+
+        .rotating-shape {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: rotate 8s infinite linear;
+        }
+
+        .rotating-shape-1 {
+            top: 50%;
+            left: 10%;
+        }
+
+        .rotating-shape-2 {
+            bottom: 20%;
+            right: 20%;
+        }
+
+        /* Medical-themed icons */
+        .icon-container {
+            position: absolute;
+            top: 5%;
+            right: 5%;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 4s infinite alternate;
+        }
+
+        .icon img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .shape-medical {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: rotate 6s infinite linear;
+        }
+
+        .shape-medical-1 {
+            top: 10%;
+            left: 10%;
+        }
+
+        .shape-medical-2 {
+            bottom: 10%;
+            right: 10%;
+        }
+
+        /* Light effects */
+        .light {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            filter: blur(20px);
+            animation: blink 3s infinite alternate;
+        }
+
+        .light-1 {
+            top: 30%;
+            left: 30%;
+        }
+
+        .light-2 {
+            top: 60%;
+            right: 30%;
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 0.7;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="welcome-container">
+        <div class="welcome-content">
+            <h1>Welcome to AISurge-Kit</h1>
+            <p>Streamline your surgical scheduling process with the power of artificial intelligence..</p>
+        </div>
+        <div class="login-container">
+            <a href="{{ url_for('application') }}"><button>Sign up as a Surgeon</button></a>
+            <a href="{{ url_for('recep_sign') }}"><button>Sign up as a Receptionist</button></a>
+            <a href="{{ url_for('login') }}"><button>Log In</button></a>
+        </div>
+    </div>
+    <div class="shape-1"></div>
+    <div class="shape-2"></div>
+    <div class="shape-3"></div>
+    <div class="rotating-shape rotating-shape-1"></div>
+    <div class="rotating-shape rotating-shape-2"></div>
+    <div class="icon-container">
+    
+    <div class="shape-medical shape-medical-1"></div>
+    <div class="shape-medical shape-medical-2"></div>
+    <div class="light light-1"></div>
+    <div class="light light-2"></div>
+</body>
+
+</html>

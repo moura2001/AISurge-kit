@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)file:///C:/Users/venaa/Desktop/sidebar.html -->
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="icon" href="https://i.postimg.cc/NjRpXSm3/favicon-438.png" target="_blank" type="image/png" sizes="512x512">
+
+    <title>Surgeon view</title>
+    <style>
+        body {
+    background: linear-gradient(to bottom, #0079BF, white);
+            background-repeat: repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto; /* Add this line */
+            background-color: rgba(240, 240, 240, 0.5); /* Semi-transparent background */
+        }
+
+        .side-menu {
+            width: 200px; /* Adjust the width as needed */
+            height: 100%; /* Cover the full height of the viewport */
+            background-color: rgba(255, 255, 255, 0.5); /* Background color of the side menu */
+            position: fixed; /* Fixed position to keep it in place while scrolling */
+            left: -200px; /* Initially hide the menu */
+            top: 0; /* Align it to the top of the viewport */
+            padding-top: 20px; /* Add padding to separate content from top */
+            color: black; /* Text color */
+            z-index: 3; /* Ensure it's on top of other content */
+            transition: left 0.3s ease; /* Smooth transition for sliding effect */
+            height: 100vh; /* Set height to 100% of viewport height */
+        }
+
+.sub-menu {
+            background-color: rgba(255, 255, 255, 0.5); /* Background color of the side menu */
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px 0;
+        top: 0; /* Align it to the top of the viewport */
+
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 500px; /* Adjust the maximum height as needed */
+
+        }
+
+
+        .menu-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: black;
+            transition: background-color 0.3s ease;
+        }
+.sub-menu-item {
+            padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        }
+
+.sub-menu-item:hover {
+            background-color: rgba(255, 255, 255, 1); /* Fully opaque white background on hover */
+    }
+
+
+.menu-item-with-arrow {
+        padding: 10px 20px;
+            cursor: pointer;
+            color: black;
+            transition: background-color 0.3s ease;
+/* Adjust padding to make space for the arrow */
+    }
+
+   
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 1); /* Fully opaque white background on hover */
+        }
+
+        .content {
+            margin-left: 0; /* Adjusted to accommodate side menu width */
+            padding: 20px;
+            transition: margin-left 0.3s ease; /* Smooth transition for content movement */
+        }
+
+        .menu-text {
+            display: inline-block;
+           font-size: 20px; /* Set the font size of the text */
+           font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .toggle-menu-btn {
+            cursor: pointer;
+            font-size: 20px;
+            display: flex; /* Enable flexbox */
+            justify-content: center; /* Center the button horizontally */
+            align-items: center; /* Center the button vertically */
+            height: 60px; /* Adjust height as needed */
+            width: 60px; /* Adjust width as needed */
+            border-radius: 50%;
+            background-color: white;
+        }
+
+        .menu-container {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-top:150px;
+            border-bottom-right-radius: 30px;
+            border-top-right-radius: 30px;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3; /* Ensure it's on top of other content */
+        }
+
+        .show-menu {
+            left: 0;
+        }
+
+        .shift-content {
+            margin-left: 200px; /* Adjust the margin to accommodate the width of the menu */
+        }
+
+        .question-container {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            align-items: center;
+            justify-content: left;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .question-column {
+            grid-column: 1;
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .yes-column {
+            grid-column: 2;
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        .no-column {
+            grid-column: 3;
+            text-align: left;
+        }
+
+        .question {
+            /* Remove margin */
+        }
+
+        .arrow {
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .questionnaire-container {
+            position: absolute;
+            top: 0;
+            left: 0px; /* Adjust to match the width of the side menu */
+            right: 0; /* Adjust to ensure content stretches to the right edge of the viewport */
+            bottom: 0;
+            padding-right: 265px; /* Adjust to leave space for scrollbar */
+            padding-left: 265px; /* Adjust padding to create space between side menu and content */
+            z-index: 2;
+            overflow-y: auto;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+.buttons-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .buttons-container button {
+            margin-bottom: 10px;
+            background-color: #0e75b0;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+             width:50%;
+        }
+
+        .buttons-container button:hover {
+            opacity: 0.8;
+        }
+.calendar {
+    width: 100%;
+height: 600px;
+    margin: 0 auto;
+    background-color: #f0f0f0; /* Set the background color */
+}
+
+.room-calendar {
+    width: 100%;
+height: 600px;
+    margin: 0 auto;
+    background-color: #f0f0f0; /* Set the background color */
+}
+
+.weekly-calendar {
+    width: 100%;
+height: 600px;
+    margin: 0 auto;
+    background-color: #f0f0f0; /* Set the background color */
+}
+.weekly-calendar-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+
+.weekly-date-picker-container {
+            background-color: rgba(240, 240, 240, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+.weekly-calendar-date {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+.event-content {
+            font-size: 12px;
+            background-color: lightblue;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+.surgery-count-container {
+    display: flex;
+    align-items: center;
+    width: auto; /* Adjust width based on content */
+    color: white;
+    margin: 2px;
+    padding: 2px;
+    font-size: 11px; /* Adjust font size */
+    flex-wrap: wrap; /* Allow wrapping */
+}
+
+.surgery-count-circle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #00008b;
+    font-size: 13px; /* Adjust font size */
+
+    color: white;
+    text-align: center;
+    margin-right: 4px; /* Space between circle and room name */
+}
+
+.surgery-room {
+    word-wrap: break-word; /* Allow long words to break and wrap to the next line */
+    word-break: break-word; /* Ensure the word will break inside the element */
+    white-space: normal; /* Allow text to wrap to the next line */
+    flex: 1; /* Allow room name to take remaining space */
+}
+.fc-event-title {
+            display: flex;
+            align-items: center;
+        }
+
+.fc-dayGridWeek-frame {
+    border: 1px solid #000; /* Set the border color and width for the grid */
+}
+
+.fc-dayGridWeek-view table {
+    border-collapse: separate; /* Ensure table cells have distinct borders */
+    border-spacing: 2px; /* Set the spacing between table cells */
+}
+
+.fc-dayGridWeek-view th,
+.fc-dayGridWeek-view td {
+    border: 1px solid #ccc; /* Set the border color and width for table cells */
+}        
+
+.calendar-header {
+            font-weight: bold;
+            padding: 10px;
+        }
+        .calendar-cell {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .date-column {
+            border-right: 1px solid #ccc;
+        }
+                /* Style for the date picker container */
+        .date-picker-container {
+            background-color: rgba(240, 240, 240, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+.room-date-picker-container {
+            background-color: rgba(240, 240, 240, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        	.time-column {
+            background-color: rgba(240, 240, 240, 0.8);
+            /* Semi-transparent gray bar */
+            border-right: 1px solid #ccc;
+        }
+
+        .calendar-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+.room-calendar-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+
+        .calendar-date {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+.room-calendar-date {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+
+    
+    }
+.monthly-calendar {
+    border-collapse: collapse;
+    width: 80%; /* Adjust the width of the table */
+    margin: auto; /* Center the table horizontally */
+            background-color: rgba(240, 240, 240, 0.8);
+    border-collapse: separate; /* Ensure no spaces between cells */
+
+
+}
+
+.monthly-calendar th, .monthly-calendar td {
+    border: 1px solid black;
+    padding: 0px; /* Increase padding for better spacing */
+    text-align: center;
+            background-color: rgba(240, 240, 240, 0.8);
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+
+}
+.custom-popover {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            z-index: 1000;
+max-width: 600px;
+max-height: 600px;
+
+        }
+        .custom-popover .close-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+.custom-popover .close-but {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+.custom-event-class {
+  background-color: green !important; /* Default background color */
+      color: white;
+}
+
+.green-event-class {
+      background-color: green !important;}
+
+    </style>
+</head>
+<body style="margin-left: 0px;">
+<div class="menu-container">
+    <div class="toggle-menu-btn" onclick="toggleMenu()">Menu</div>
+</div>
+<div class="side-menu" id="sideMenu" style="left: -200px;">
+<div class="menu-item" onclick="toggleCalendar()">Daily Calendar</div>
+<div class="menu-item" onclick="toggleWeeklyCalendar()">Weekly Calendar</div>
+</div>
+
+
+<div id="daily-calendar" class="questionnaire-container" style="display: none;">
+    <h1>Daily Calendar</h1>
+    <form>
+        <div class="calendar-container">
+            <div class="date-picker-container">
+                <div class="calendar-label" for="datepicker">Select a date:</div>
+                <input type="date" id="datepicker" name="datepicker" class="calendar-date">
+            </div>
+            <div class="calendar hidden" id="calendar"></div>
+        </div>
+    </form>
+</div>
+
+<div id="weekly-calendar" class="questionnaire-container" style="display: none;">
+    <h1>Weekly Calendar</h1>
+    <form>
+        <div class="weekly-calendar-container">
+            <div class="weekly-date-picker-container">
+                <div class="weekly-calendar-label" for="weekly-datepicker">Select a date:</div>
+                <input type="date" id="weekly-datepicker" name="weekly-datepicker" class="weekly-calendar-date">
+            </div>
+            <div class="weekly-calendar hidden" id="weekly-calendar-2"></div>
+        </div>
+    </form>
+</div>
+
+
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/daygrid/main.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/interaction/main.min.js"></script>
+<script>
+
+
+
+function toggleMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            const content = document.body; // Change to your content container if needed
+                const toggleBtn = document.querySelector('.toggle-menu-btn');
+
+            // Check if the menu is currently visible
+            const isVisible = sideMenu.style.left === '0px';
+
+            // If the menu is visible, hide it. Otherwise, show it.
+            if (isVisible) {
+                sideMenu.style.left = '-200px';
+                content.style.marginLeft = '0'; // Reset content margin
+        //toggleBtn.textContent = '^'; // Change button text to '>'
+
+            } else {
+                sideMenu.style.left = '0px';
+                content.style.marginLeft = '200px'; // Shift content to the right
+        //toggleBtn.textContent = 'v'; // Change button text to '>'
+
+            }}
+
+
+
+
+function createPopover(info, calendarEl) {
+    var popover = document.createElement('div');
+    popover.classList.add('custom-popover');
+
+    // Define the main content of the popover
+    var mainContent = `
+        <div><strong>surgery type:</strong> ${info.event.extendedProps.surgery_type}</div>
+        <div><strong>operation type:</strong> ${info.event.extendedProps.operation_type}</div>
+        <div><strong>department:</strong> ${info.event.extendedProps.department}</div>
+        <div><strong>operation description:</strong> ${info.event.extendedProps.operation_description}</div>
+        <div><strong>surgeon 1:</strong> ${info.event.extendedProps.surgeon_1_name}</div>
+        <div><strong>surgeon 2:</strong> ${info.event.extendedProps.surgeon_2_name}</div>
+        <div><strong>need for ICU:</strong> ${info.event.extendedProps.Need_for_ICU}</div>
+        <button type="button" class="close-button">&times;</button>
+        <button type="button" id="data-button">Patient data</button>
+    `;
+
+    // Define the patient data content
+    var patientDataContent = `
+        <div><strong>Patient ID:</strong> ${info.event.extendedProps.patient_id}</div>
+        <div><strong>Gender:</strong> ${info.event.extendedProps.pat_gend}</div>
+        <div><strong>Age:</strong> ${info.event.extendedProps.pat_age}</div>
+        <div><strong>Weight:</strong> ${info.event.extendedProps.patient_weight}</div>
+        <div><strong>BMI:</strong> ${info.event.extendedProps.patient_BMI}</div>
+        <div><strong>Allergy:</strong> ${info.event.extendedProps.patient_allergy}</div>
+        <div><strong>Allergy level:</strong> ${info.event.extendedProps.patient_allergyLevel}</div>
+        <div><strong>Diagnosis:</strong> ${info.event.extendedProps.patient_diagnosis}</div>
+        <div><strong>Previous operations:</strong> ${info.event.extendedProps.previousOperations}</div>
+        <div><strong>Additional operation:</strong> ${info.event.extendedProps.additonalOperation}</div>
+        <div><strong>Diabetes:</strong> ${info.event.extendedProps.patient_diabetes}</div>
+        <div><strong>Hypertension:</strong> ${info.event.extendedProps.patient_hyper}</div>
+        <div><strong>Hypotension:</strong> ${info.event.extendedProps.patient_hypo}</div>
+        <div><strong>Family history:</strong> ${info.event.extendedProps.patient_family}</div>
+        <div><strong>Anesthesia type:</strong> ${info.event.extendedProps.patient_ana}</div>
+        <button type="button" class="back-button">&lt; Back</button>
+        <button type="button" class="close-but">&times;</button>
+    `;
+
+    // Set the initial content
+    popover.innerHTML = mainContent;
+
+    // Attach event listeners
+    attachEventListeners();
+
+    // Function to attach event listeners
+    function attachEventListeners() {
+        // Close button event listener
+        var closeButton = popover.querySelector('.close-button');
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                popover.remove();
+            });
+        }
+
+        // Data button event listener
+        var dataButton = popover.querySelector('#data-button');
+        if (dataButton) {
+            dataButton.addEventListener('click', function() {
+                popover.innerHTML = patientDataContent;
+                attachEventListeners(); // Reattach event listeners after updating content
+            });
+        }
+
+        // Close button for patient data view
+        var closeBut = popover.querySelector('.close-but');
+        if (closeBut) {
+            closeBut.addEventListener('click', function() {
+                popover.remove();
+            });
+        }
+
+        // Back button event listener
+        var backButton = popover.querySelector('.back-button');
+        if (backButton) {
+            backButton.addEventListener('click', function() {
+                popover.innerHTML = mainContent;
+                attachEventListeners(); // Reattach event listeners after updating content
+            });
+        }
+    }
+
+    // Position the popover
+    positionPopover(popover, info);
+
+    // Append the popover to the document body
+    document.body.appendChild(popover);
+
+    return popover;
+}
+
+function positionPopover(popover, info) {
+    // Position the popover relative to the event
+    var eventPosition = info.jsEvent.target.getBoundingClientRect();
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    var posX = eventPosition.left + scrollLeft;
+    var posY = eventPosition.top + scrollTop;
+
+    // Adjust popover position to keep it within the viewport
+    var viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+    var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    var popoverWidth = popover.offsetWidth;
+    var popoverHeight = popover.offsetHeight;
+    var offsetX = posX + popoverWidth > viewportWidth ? posX - popoverWidth : posX;
+    var offsetY = posY + popoverHeight > viewportHeight ? posY - popoverHeight : posY;
+
+    popover.style.left = offsetX + 'px';
+    popover.style.top = offsetY + 'px';
+}
+
+
+
+
+// Function to initialize the calendar
+function initializeDaily(doctorId, selectedDate) {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridDay',
+        events: function(info, successCallback, failureCallback) {
+            // Check if doctor ID and date are both available
+            if (!doctorId || !selectedDate) {
+                console.log('Doctor ID or date parameter missing');
+                return; // Exit the function without sending a request
+            }
+            
+            // Make a GET request to the Flask endpoint to fetch events for the specified doctor and date
+            $.ajax({
+                url: '/get_events_by_doc',
+                type: 'GET',
+                data: {
+                    date: selectedDate, // Include the selected date parameter
+                    doctor_id: doctorId // Include the doctor ID parameter
+                },
+                success: function(response) {
+                    successCallback(response); // Pass the events data to FullCalendar
+                },
+                error: function(xhr, status, error) {
+                    // Call the failure callback with the error message
+                    failureCallback('Failed to fetch events for the specified doctor');
+                }
+            });
+        },
+        eventClassNames: function(arg) {
+            return ['custom-event-class'];
+        },
+        eventClick: function(info) {
+            var popover = createPopover(info, calendarEl); // Pass calendarEl to createPopover
+            document.body.appendChild(popover);
+
+            var closeButton = popover.querySelector('.close-button');
+            closeButton.addEventListener('click', function() {
+                popover.remove();
+            });
+        }
+    });
+
+    // Render the calendar
+    calendar.render();
+
+    // Set the calendar to the selected date
+    calendar.gotoDate(selectedDate);
+
+    // Show the calendar element
+    $('#calendar').removeClass('hidden');
+}
+
+// Bind the initializeCalendar function to the change event of the date picker
+$('#datepicker').on('change', function() {
+    var selectedDate = $(this).val();
+    initializeDaily('{{ doctor_id }}',selectedDate);
+});
+ 
+
+function initializeWeekly(weeklyselectedDate) {
+            var weeklycalendarEl = document.getElementById('weekly-calendar-2');
+
+            // Fetch surgery count data
+            $.getJSON('/weekly_doc_count_data')
+                .done(function(surgeryCountData) {
+                    console.log("Surgery count data fetched:", surgeryCountData); // Debugging info
+                    var events = [];
+
+                    for (const [date, rooms] of Object.entries(surgeryCountData)) {
+                        for (const [room, count] of Object.entries(rooms)) {
+                            events.push({
+                                title: `<div class="surgery-count-circle">${count}</div>${room}`,
+                                start: date
+                            });
+                        }
+                    }
+
+                    var weeklycalendar = new FullCalendar.Calendar(weeklycalendarEl, {
+                        initialView: 'dayGridWeek',
+                        events: events, // Set events here
+                        eventContent: function(arg) {
+                            return { html: arg.event.title };
+                        }
+                    });
+                    $('#weekly-calendar-2').removeClass('hidden');
+
+                    weeklycalendar.render(); // Render the calendar
+
+                    // Set the calendar to the selected date
+                    weeklycalendar.gotoDate(weeklyselectedDate);
+
+                    // Show the calendar element
+                })
+                .fail(function(jqxhr, textStatus, error) {
+                    var err = textStatus + ", " + error;
+                    console.error("Request Failed: " + err);
+                });
+        }
+
+        // Bind the initializeWeekly function to the change event of the date picker
+        $(document).ready(function() {
+            $('#weekly-datepicker').on('change', function() {
+                var weeklyselectedDate = $(this).val();
+                initializeWeekly(weeklyselectedDate);
+            });
+        });
+
+
+
+
+
+
+
+function toggleCalendar() {
+
+        var calendar = document.getElementById("daily-calendar");
+    calendar.style.display = calendar.style.display === "none" ? "block" : "none";
+var weeklycalendar = document.getElementById("weekly-calendar");
+weeklycalendar.style.display="none";
+}
+
+function toggleWeeklyCalendar() {
+var dailycalendar = document.getElementById("daily-calendar");
+    dailycalendar.style.display = "none";
+var weeklycalendar = document.getElementById("weekly-calendar");
+    weeklycalendar.style.display = weeklycalendar.style.display === "none" ? "block" : "none";
+
+}
+
+
+
+
+</script>
+</body>
+</html>

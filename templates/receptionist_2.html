@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)file:///C:/Users/venaa/Desktop/sidebar.html -->
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="icon" href="https://i.postimg.cc/NjRpXSm3/favicon-438.png" target="_blank" type="image/png" sizes="512x512">
+
+    <title>Receptionist view</title>
+    <style>
+        body {
+    background: linear-gradient(to bottom, #0079BF, white);
+            background-repeat: repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto; /* Add this line */
+            background-color: rgba(240, 240, 240, 0.5); /* Semi-transparent background */
+        }
+
+        .side-menu {
+            width: 200px; /* Adjust the width as needed */
+            height: 100%; /* Cover the full height of the viewport */
+            background-color: rgba(255, 255, 255, 0.5); /* Background color of the side menu */
+            position: fixed; /* Fixed position to keep it in place while scrolling */
+            left: -200px; /* Initially hide the menu */
+            top: 0; /* Align it to the top of the viewport */
+            padding-top: 20px; /* Add padding to separate content from top */
+            color: black; /* Text color */
+            z-index: 3; /* Ensure it's on top of other content */
+            transition: left 0.3s ease; /* Smooth transition for sliding effect */
+            height: 100vh; /* Set height to 100% of viewport height */
+        }
+
+.sub-menu {
+            background-color: rgba(255, 255, 255, 0.5); /* Background color of the side menu */
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px 0;
+        top: 0; /* Align it to the top of the viewport */
+
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 500px; /* Adjust the maximum height as needed */
+
+        }
+
+
+        .menu-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: black;
+            transition: background-color 0.3s ease;
+        }
+.sub-menu-item {
+            padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        }
+
+.sub-menu-item:hover {
+            background-color: rgba(255, 255, 255, 1); /* Fully opaque white background on hover */
+    }
+
+
+.menu-item-with-arrow {
+        padding: 10px 20px;
+            cursor: pointer;
+            color: black;
+            transition: background-color 0.3s ease;
+/* Adjust padding to make space for the arrow */
+    }
+
+   
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 1); /* Fully opaque white background on hover */
+        }
+
+        .content {
+            margin-left: 0; /* Adjusted to accommodate side menu width */
+            padding: 20px;
+            transition: margin-left 0.3s ease; /* Smooth transition for content movement */
+        }
+
+        .menu-text {
+            display: inline-block;
+           font-size: 20px; /* Set the font size of the text */
+           font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .toggle-menu-btn {
+            cursor: pointer;
+            font-size: 20px;
+            display: flex; /* Enable flexbox */
+            justify-content: center; /* Center the button horizontally */
+            align-items: center; /* Center the button vertically */
+            height: 60px; /* Adjust height as needed */
+            width: 60px; /* Adjust width as needed */
+            border-radius: 50%;
+            background-color: white;
+        }
+
+        .menu-container {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-top:150px;
+            border-bottom-right-radius: 30px;
+            border-top-right-radius: 30px;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3; /* Ensure it's on top of other content */
+        }
+
+        .show-menu {
+            left: 0;
+        }
+
+        .shift-content {
+            margin-left: 200px; /* Adjust the margin to accommodate the width of the menu */
+        }
+
+        .question-container {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            align-items: center;
+            justify-content: left;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .question-column {
+            grid-column: 1;
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .yes-column {
+            grid-column: 2;
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        .no-column {
+            grid-column: 3;
+            text-align: left;
+        }
+
+        .question {
+            /* Remove margin */
+        }
+
+        .arrow {
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .questionnaire-container {
+            position: absolute;
+            top: 0;
+            left: 0px; /* Adjust to match the width of the side menu */
+            right: 0; /* Adjust to ensure content stretches to the right edge of the viewport */
+            bottom: 0;
+            padding-right: 265px; /* Adjust to leave space for scrollbar */
+            padding-left: 265px; /* Adjust padding to create space between side menu and content */
+            z-index: 2;
+            overflow-y: auto;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+.buttons-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .buttons-container button {
+            margin-bottom: 10px;
+            background-color: #0e75b0;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+             width:50%;
+        }
+
+        .buttons-container button:hover {
+            opacity: 0.8;
+        }
+.calendar {
+    width: 100%;
+height: 600px;
+    margin: 0 auto;
+    background-color: #f0f0f0; /* Set the background color */
+}
+
+.room-calendar {
+    width: 100%;
+height: 600px;
+    margin: 0 auto;
+    background-color: #f0f0f0; /* Set the background color */
+}
+
+.weekly-calendar {
+    width: 100%;
+height: 600px;
+    margin: 0 auto;
+    background-color: #f0f0f0; /* Set the background color */
+}
+.calendar-header {
+            font-weight: bold;
+            padding: 10px;
+        }
+        .calendar-cell {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .date-column {
+            border-right: 1px solid #ccc;
+        }
+                /* Style for the date picker container */
+        .date-picker-container {
+            background-color: rgba(240, 240, 240, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+.room-date-picker-container {
+            background-color: rgba(240, 240, 240, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+.weekly-date-picker-container {
+            background-color: rgba(240, 240, 240, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+.report-date-picker-container {
+            background-color: rgba(240, 240, 240, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+.multi-date-picker-container {
+            background-color: rgba(240, 240, 240, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        	.time-column {
+            background-color: rgba(240, 240, 240, 0.8);
+            /* Semi-transparent gray bar */
+            border-right: 1px solid #ccc;
+        }
+
+        .calendar-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+.room-calendar-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+.weekly-calendar-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+.report-calendar-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+.multi-calendar-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .calendar-date {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+.room-calendar-date {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+.weekly-calendar-date {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+.report-calendar-date {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+.multi-calendar-date {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+
+.event-content {
+            font-size: 12px;
+            background-color: lightblue;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+
+    .monthly-calendar {
+    border-collapse: collapse;
+    width: 80%; /* Adjust the width of the table */
+    margin: auto; /* Center the table horizontally */
+            background-color: rgba(240, 240, 240, 0.8);
+    border-collapse: separate; /* Ensure no spaces between cells */
+
+
+}
+
+.monthly-calendar th, .monthly-calendar td {
+    border: 1px solid black;
+    padding: 0px; /* Increase padding for better spacing */
+    text-align: center;
+            background-color: rgba(240, 240, 240, 0.8);
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+
+}
+.custom-popover {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            z-index: 1000;
+max-width: 600px;
+max-height: 600px;
+
+        }
+
+.nested-popover {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            z-index: 2000;
+max-width: 600px;
+max-height: 600px;
+
+        }
+
+        .custom-popover .close-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+.custom-event-class {
+  background-color: red !important; /* Default background color */
+      color: white;
+}
+
+.green-event-class {
+      background-color: green !important;}
+
+
+.surgery-count-container {
+    display: flex;
+    align-items: center;
+    width: auto; /* Adjust width based on content */
+    color: white;
+    margin: 2px;
+    padding: 2px;
+    font-size: 11px; /* Adjust font size */
+    flex-wrap: wrap; /* Allow wrapping */
+}
+
+.surgery-count-circle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #00008b;
+    font-size: 13px; /* Adjust font size */
+
+    color: white;
+    text-align: center;
+    margin-right: 4px; /* Space between circle and room name */
+}
+
+.surgery-room {
+    word-wrap: break-word; /* Allow long words to break and wrap to the next line */
+    word-break: break-word; /* Ensure the word will break inside the element */
+    white-space: normal; /* Allow text to wrap to the next line */
+    flex: 1; /* Allow room name to take remaining space */
+}
+.fc-event-title {
+            display: flex;
+            align-items: center;
+        }
+  
+.report-container button {
+            background-color: #0e75b0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+.multi-container button {
+            background-color: #0e75b0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+.required::after {
+  content: " *";
+  color: red;
+}
+.note{
+color: red;
+}
+
+.form-container {
+            background-color: rgba(240, 240, 240, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+
+        }
+.section-header {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 30px;
+        }
+.section-content {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .expanded .section-content {
+            display: block;
+        }
+
+        .section-header::after {
+            content: "\25B6"; /* Unicode character for right arrow */
+            margin-left: 5px;
+        }
+
+        .expanded .section-header::after {
+            content: "\25BC"; /* Unicode character for down arrow */
+        }
+.fc-dayGridWeek {
+    width: 100%; /* Ensure calendar takes full width of its container */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.fc-dayGridWeek-frame {
+    flex: 1 1 auto;
+}
+
+.fc-dayGridWeek-day {
+    position: relative;
+    flex: 1 0 0; /* Flexible width for each day */
+    min-width: calc(100% / 7); /* Ensure each day has equal width */
+    height: 100px; /* Adjust day height */
+    border: 1px solid #dddddd; /* Day border */
+}
+
+.fc-dayGridWeek-day.fc-day-today {
+    background-color: #f0f0f0; /* Highlight today's date */
+}
+
+.fc-event {
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    background-color: #3788d8; /* Event background color */
+    color: #ffffff; /* Event text color */
+    cursor: pointer;
+}
+
+
+
+    </style>
+</head>
+<body style="margin-left: 0px;">
+<div class="menu-container">
+        <div class="toggle-menu-btn" onclick="toggleMenu()">Menu</div>
+    </div>
+    <div class="side-menu" id="sideMenu" style="left: -200px;">
+        <div class="menu-item" onclick="toggleDailyCalendar()">Daily Calendar</div>
+        <div class="menu-item" onclick="toggleWeeklyCalendar()">Weekly Calendar</div>
+        <div class="menu-item-with-arrow" onclick="toggleRoom()">Room Schedule</div>
+        <div class="menu-item" onclick="toggleReport()">Report</div>
+
+        <div class="sub-menu" id="roomSubMenu" style="display: none;">
+            <div class="menu-item-with-arrow" onclick="hideSubMenu()">← Back</div>
+            <div class="sub-menu-item" onclick="toggleItem('G23')">G23</div>
+            <div class="sub-menu-item" onclick="toggleItem('G25')">G25</div>
+            <div class="sub-menu-item" onclick="toggleItem('G27')">G27</div>
+            <div class="sub-menu-item" onclick="toggleItem('G29')">G29</div>
+            <div class="sub-menu-item" onclick="toggleItem('G45')">G45</div>
+            <div class="sub-menu-item" onclick="toggleItem('G47')">G47</div>
+            <div class="sub-menu-item" onclick="toggleItem('G49')">G49</div>
+            <div class="sub-menu-item" onclick="toggleItem('G51')">G51</div>
+            <div class="sub-menu-item" onclick="toggleItem('Lithotripsy')">Lithotripsy</div>
+            <div class="sub-menu-item" onclick="toggleItem('OPERATION ROOM 1')">OPERATION ROOM 1</div>
+            <div class="sub-menu-item" onclick="toggleItem('OPERATION ROOM 2')">OPERATION ROOM 2</div>
+            <div class="sub-menu-item" onclick="toggleItem('OPERATION ROOM 3')">OPERATION ROOM 3</div>
+            <div class="sub-menu-item" onclick="toggleItem('OPERATION ROOM 4')">OPERATION ROOM 4</div>
+            <div class="sub-menu-item" onclick="toggleItem('OPERATION ROOM 5')">OPERATION ROOM 5</div>
+            <div class="sub-menu-item" onclick="toggleItem('OPERATION ROOM 6')">OPERATION ROOM 6</div>
+            <div class="sub-menu-item" onclick="toggleItem('OPERATION ROOM 7')">OPERATION ROOM 7</div>
+            <div class="sub-menu-item" onclick="toggleItem('OPERATION ROOM 8')">OPERATION ROOM 8</div>
+            <div class="sub-menu-item" onclick="toggleItem('OPERATION ROOM 9')">OPERATION ROOM 9</div>
+            <div class="sub-menu-item" onclick="toggleItem('A207')">A207</div>
+        </div>
+    </div>
+
+    <div id="daily-calendar" class="questionnaire-container" style="display: none;">
+        <h1>Daily Calendar</h1>
+        <form>
+            <div class="calendar-container">
+                <div class="date-picker-container">
+                    <div class="calendar-label" for="datepicker">Select a date:</div>
+                    <input type="date" id="datepicker" name="datepicker" class="calendar-date">
+                </div>
+                <div class="calendar hidden" id="calendar"></div>
+            </div>
+        </form>
+    </div>
+
+    <div id="room-calendar" class="questionnaire-container" style="display: none;">
+        <h1>Calendar</h1>
+        <form>
+            <div class="room-calendar-container">
+                <div class="room-date-picker-container">
+                    <div class="room-calendar-label" for="room-datepicker">Select a date:</div>
+                    <input type="date" id="room-datepicker" name="room-datepicker" class="room-calendar-date">
+                </div>
+                <div class="room-calendar hidden" id="room-calendar-2"></div>
+            </div>
+        </form>
+    </div>
+
+    <div id="weekly-calendar" class="questionnaire-container" style="display: none;">
+        <h1>Weekly Calendar</h1>
+        <form>
+            <div class="weekly-calendar-container">
+                <div class="weekly-date-picker-container">
+                    <div class="weekly-calendar-label" for="weekly-datepicker">Select a date:</div>
+                    <input type="date" id="weekly-datepicker" name="weekly-datepicker" class="weekly-calendar-date">
+                </div>
+                <div class="weekly-calendar hidden" id="weekly-calendar-2"></div>
+            </div>
+        </form>
+    </div>
+
+    <div id="report" class="questionnaire-container" style="display: none;">
+        <h1>Report</h1>
+    <div class="form-container">
+       <div class="section-header" onclick="toggleSection('day-report')">Report for a single day</div>
+            <div id="day-report" class="section-content expanded">
+             <div class="report-container">
+                <div class="report-date-picker-container">
+                    <div class="report-calendar-label" for="report-datepicker">Select a date:</div>
+                    <input type="date" id="report-datepicker" name="report-datepicker" class="report-calendar-date">
+                     <br><br>
+                    <button id="generate-report-btn">Generate Report</button>
+
+                </div>
+            </div>
+              <div id="reportContainer"></div>
+           </div>
+      <div class="section-header" onclick="toggleSection('multi-report')">Report for multiple days</div>
+      <div id="multi-report" class="section-content expanded">
+             <div class="multi-container">
+                <div class="multi-date-picker-container">
+<div class="multi-calendar-label" for="from-report-datepicker">From:</div>
+                    <input type="date" id="from-report-datepicker" name="from-report-datepicker" class="report-calendar-date">
+                     <br>
+<div class="multi-calendar-label" for="from-report-datepicker">To:</div>
+                    <input type="date" id="to-report-datepicker" name="to-report-datepicker" class="report-calendar-date">
+                     <br><br>
+                    <button id="generate-multi-btn">Generate Report</button>
+
+                </div>
+
+      </div>
+              <div id="multiContainer"></div>
+
+</div>
+      </div>
+      </div>
+
+       </div>
+    </div>
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/daygrid/main.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/interaction/main.min.js"></script>
+<script>
+
+function toggleSection(sectionId) {
+        var section = document.getElementById(sectionId);
+        if (section.style.display === "none") {
+            section.style.display = "block";
+            section.classList.add("expanded");
+        } else {
+            section.style.display = "none";
+            section.classList.remove("expanded");
+        }
+    }
+
+
+function initializeReport(selectedDate) {
+    $.ajax({
+        url: '/generate-report',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ date: selectedDate }),
+        success: function(data) {
+                        $('#reportContainer').empty().append('<img src="data:image/png;base64,' + data + '">');
+
+        },
+        error: function(xhr, status, error) {
+            alert('Error generating report');
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+$('#generate-report-btn').on('click', function(event) {
+        event.preventDefault(); // Prevent default button behavior (e.g., form submission)
+        var selectedDate = $('#report-datepicker').val();
+        initializeReport(selectedDate);
+    });
+
+function initializeMulti(fromDate,toDate) {
+    $.ajax({
+        url: '/generate-multi',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ from: fromDate , to:toDate}),
+        success: function(data) {
+                        $('#multiContainer').empty().append('<img src="data:image/png;base64,' + data + '">');
+
+        },
+        error: function(xhr, status, error) {
+            alert('Error generating report');
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+$('#generate-multi-btn').on('click', function(event) {
+        event.preventDefault(); // Prevent default button behavior (e.g., form submission)
+        var fromDate = $('#from-report-datepicker').val();
+        var toDate = $('#to-report-datepicker').val();
+
+        initializeMulti(fromDate,toDate);
+    });
+
+        function toggleMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            const content = document.body; // Change to your content container if needed
+                const toggleBtn = document.querySelector('.toggle-menu-btn');
+
+            // Check if the menu is currently visible
+            const isVisible = sideMenu.style.left === '0px';
+
+            // If the menu is visible, hide it. Otherwise, show it.
+            if (isVisible) {
+                sideMenu.style.left = '-200px';
+                content.style.marginLeft = '0'; // Reset content margin
+        //toggleBtn.textContent = '^'; // Change button text to '>'
+
+            } else {
+                sideMenu.style.left = '0px';
+                content.style.marginLeft = '200px'; // Shift content to the right
+        //toggleBtn.textContent = 'v'; // Change button text to '>'
+
+            }}
+
+    
+function hideSubMenu() {
+            var sideMenu = document.getElementById("sideMenu");
+    var mainMenuItems = sideMenu.querySelectorAll(".menu-item");
+    var roomScheduleTab = document.querySelector(".menu-item-with-arrow");
+    var roomSubMenu = document.getElementById("roomSubMenu");
+    var subMenuItems = roomSubMenu.querySelectorAll(".sub-menu-item");
+
+    // Hide main menu items and "Room Schedule" tab
+    mainMenuItems.forEach(function(item) {
+        item.style.display = "block";
+    });
+    roomScheduleTab.style.display = "block";
+
+    // Show submenu items
+    roomSubMenu.style.display = "none";
+    subMenuItems.forEach(function(item) {
+        item.style.display = "none";
+    });
+
+        }
+
+
+function toggleDailyCalendar() {
+    var dailycalendar = document.getElementById("daily-calendar");
+        var weeklycalendar = document.getElementById("weekly-calendar");
+weeklycalendar.style.display="none";
+    
+    var room = document.getElementById("room-calendar");
+    room.style.display = "none";
+
+    dailycalendar.style.display = dailycalendar.style.display === "none" ? "block" : "none";
+    var report = document.getElementById("report");
+report.style.display="none";
+
+}
+
+function toggleWeeklyCalendar() {
+    
+        var dailycalendar = document.getElementById("daily-calendar");
+    dailycalendar.style.display = "none";
+    
+var room = document.getElementById("room-calendar");
+    room.style.display = "none";
+
+    var weeklycalendar = document.getElementById("weekly-calendar");
+    weeklycalendar.style.display = weeklycalendar.style.display === "none" ? "block" : "none";
+    var report = document.getElementById("report");
+report.style.display="none";
+}
+
+
+function toggleRoom() {
+            var dailycalendar = document.getElementById("daily-calendar");
+    dailycalendar.style.display = "none";
+    var weeklycalendar = document.getElementById("weekly-calendar");
+    weeklycalendar.style.display = "none";
+    
+// Toggle the visibility of the sub-menu when Room Schedule is clicked
+        var sideMenu = document.getElementById("sideMenu");
+    var mainMenuItems = sideMenu.querySelectorAll(".menu-item");
+    var roomScheduleTab = document.querySelector(".menu-item-with-arrow");
+    var roomSubMenu = document.getElementById("roomSubMenu");
+    var subMenuItems = roomSubMenu.querySelectorAll(".sub-menu-item");
+
+    // Hide main menu items and "Room Schedule" tab
+    mainMenuItems.forEach(function(item) {
+        item.style.display = "none";
+    });
+    roomScheduleTab.style.display = "none";
+
+    // Show submenu items
+    roomSubMenu.style.display = "block";
+    subMenuItems.forEach(function(item) {
+        item.style.display = "block";
+    });
+}
+
+
+function toggleReport(){
+var dailycalendar = document.getElementById("daily-calendar");
+    dailycalendar.style.display = "none";
+    
+var room = document.getElementById("room-calendar");
+    room.style.display = "none";
+
+    var weeklycalendar = document.getElementById("weekly-calendar");
+    weeklycalendar.style.display ="none";
+var report = document.getElementById("report");
+    report.style.display = report.style.display === "none" ? "block" : "none";
+
+
+}
+
+var roomCalendars = {}; // Object to store room calendars
+
+
+
+
+
+function toggleItem(item) {
+    // Get the container where the content will be displayed
+    var container = document.getElementById('room-calendar');
+var itemId = item.replace(/\s/g, '-'); // Replace spaces with dashes
+
+    // Generate the content for the selected item
+    var content = `
+        <div class="questionnaire-container">
+            <h1>${item} Calendar</h1>
+            <form>
+                <div class="room-calendar-container">
+                    <div class="room-date-picker-container">
+                        <label class="room-calendar-label" for="room-datepicker">Select a date:</label>
+                        <input type="date" id="room-datepicker-${itemId}" name="room-datepicker" class="room-calendar-date">
+                    </div>
+                    <div class="room-calendar hidden" id="room-calendar-${itemId}"></div>
+                </div>
+            </form>
+        </div>
+    `;
+
+    // Update the container with the generated content
+    container.innerHTML = content;
+
+    // Display the container
+    container.style.display = container.style.display === "none" ? "block" : "none";
+var mainMenuItems = document.querySelectorAll(".menu-item");
+mainMenuItems.forEach(function(mainMenuItem) {
+    mainMenuItem.addEventListener('click', function() {
+        // Check if a specific tab is clicked
+        if (mainMenuItem.textContent.trim() === "Daily Calendar") {
+container.style.display ="none";
+}
+});
+});
+    initializeCalendar(item);
+
+
+
+}
+
+function createPopover(info, calendarEl) {
+    var popover = document.createElement('div');
+    popover.classList.add('custom-popover');
+    popover.innerHTML = getPopoverContent(info);
+popover.id = 'custom-popover-1'
+    // Attach event listeners
+    attachPopoverEventListeners(popover, info, calendarEl);
+
+    // Position the popover
+    positionPopover(popover, info);
+
+    // Append the popover to the document body
+    document.body.appendChild(popover);
+
+    return popover;
+}
+
+function getPopoverContent(info) {
+    return `
+        <div><strong>surgery type:</strong> ${info.event.extendedProps.surgery_type}</div>
+        <div><strong>operation type:</strong> ${info.event.extendedProps.operation_type}</div>
+        <div><strong>department:</strong> ${info.event.extendedProps.department}</div>
+        <div><strong>operation description:</strong> ${info.event.extendedProps.operation_description}</div>
+        <div><strong>surgeon 1:</strong> ${info.event.extendedProps.surgeon_1_name}</div>
+        <div><strong>surgeon 2:</strong> ${info.event.extendedProps.surgeon_2_name}</div>
+        <div><strong>need for ICU:</strong>${info.event.extendedProps.Need_for_ICU}</div>
+
+        <button type="button" class="close-button">&times;</button>
+        <button type="button" id="edit-button">Edit</button>
+        <button type="button" id="submit-button">Submit</button>
+        <button type="button" id="reset-button">Reset</button>
+    `;
+}
+
+function attachPopoverEventListeners(popover, info, calendarEl) {
+    // Close button event listener
+    popover.querySelector('.close-button').addEventListener('click', function() {
+        popover.remove();
+    });
+
+    // Submit button event listener
+    popover.querySelector('#submit-button').addEventListener('click', function() {
+        handleSubmitButton(popover, info);
+    });
+
+    // Reset button event listener
+    popover.querySelector('#reset-button').addEventListener('click', function() {
+        handleResetButton(popover, info);
+    });
+
+    // Edit button event listener
+    popover.querySelector('#edit-button').addEventListener('click', function() {
+        showEditForm(popover, info);
+    });
+}
+
+function positionPopover(popover, info) {
+    var eventPosition = info.jsEvent.target.getBoundingClientRect();
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    var posX = eventPosition.left + scrollLeft;
+    var posY = eventPosition.top + scrollTop;
+
+    // Adjust popover position to keep it within the viewport
+    var viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+    var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    var popoverWidth = popover.offsetWidth;
+    var popoverHeight = popover.offsetHeight;
+
+    if (posX + popoverWidth > viewportWidth) {
+        posX = viewportWidth - popoverWidth;
+    }
+    if (posY + popoverHeight > viewportHeight) {
+        posY = viewportHeight - popoverHeight;
+    }
+
+    popover.style.left = `${posX}px`;
+    popover.style.top = `${posY}px`;
+}
+
+function handleSubmitButton(popover, info) {
+    var submitButton = popover.querySelector('#submit-button');
+    submitButton.disabled = true;
+
+    info.el.classList.remove('custom-event-class');
+    info.el.classList.add('green-event-class');
+
+var isoDateTime = new Date(info.event.start); // Ensure info.event.start is in a format that Date constructor can parse
+
+// Increase the start time by 2 hours
+isoDateTime.setHours(isoDateTime.getHours() + 2);
+
+// Extract date and time parts
+var updatedDatePart = isoDateTime.toISOString().split('T')[0]; // '2023-06-20'
+var updatedTimePart = isoDateTime.toISOString().split('T')[1].slice(0, 8); // '12:00'
+
+// Combine datePart and updatedTimePart
+var updatedStart = `${updatedDatePart}T${updatedTimePart}`;
+
+var isoDateTime2 = new Date(info.event.end); // Ensure info.event.start is in a format that Date constructor can parse
+
+// Increase the start time by 2 hours
+isoDateTime2.setHours(isoDateTime2.getHours() + 2);
+
+// Extract date and time parts
+var updatedDatePart2 = isoDateTime2.toISOString().split('T')[0]; // '2023-06-20'
+var updatedTimePart2 = isoDateTime2.toISOString().split('T')[1].slice(0, 8); // '12:00'
+
+// Combine datePart and updatedTimePart
+var updatedEnd = `${updatedDatePart2}T${updatedTimePart2}`;
+
+
+    var eventData = {
+        title: info.event.title,
+        start: updatedStart,
+        end: updatedEnd,
+        extendedProps: info.event.extendedProps
+    };
+
+    $.ajax({
+        url: '/submit_event',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(eventData),
+        success: function(response) {
+            console.log('Event submitted successfully:', response);
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to submit event:', error);
+        }
+    });
+
+    popover.remove();
+}
+
+function handleResetButton(popover, info) {
+    //var submitButton = popover.querySelector('#submit-button');
+    //submitButton.disabled = false;
+
+    info.el.style.backgroundColor = 'red';
+    info.el.classList.remove('green-event-class');
+    info.el.classList.add('custom-event-class');
+
+    var isoDateTime = new Date(info.event.start); // Ensure info.event.start is in a format that Date constructor can parse
+
+// Increase the start time by 2 hours
+isoDateTime.setHours(isoDateTime.getHours() + 2);
+
+// Extract date and time parts
+var updatedDatePart = isoDateTime.toISOString().split('T')[0]; // '2023-06-20'
+var updatedTimePart = isoDateTime.toISOString().split('T')[1].slice(0, 8); // '12:00'
+
+// Combine datePart and updatedTimePart
+var updatedStart = `${updatedDatePart}T${updatedTimePart}`;
+
+var isoDateTime2 = new Date(info.event.end); // Ensure info.event.start is in a format that Date constructor can parse
+
+// Increase the start time by 2 hours
+isoDateTime2.setHours(isoDateTime2.getHours() + 2);
+
+// Extract date and time parts
+var updatedDatePart2 = isoDateTime2.toISOString().split('T')[0]; // '2023-06-20'
+var updatedTimePart2 = isoDateTime2.toISOString().split('T')[1].slice(0, 8); // '12:00'
+
+// Combine datePart and updatedTimePart
+var updatedEnd = `${updatedDatePart2}T${updatedTimePart2}`;
+
+
+    var eventData = {
+        title: info.event.title,
+        start: updatedStart,
+        end: updatedEnd,
+        extendedProps: info.event.extendedProps
+    };
+
+
+    $.ajax({
+        url: '/remove_event',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(eventData),
+        success: function(response) {
+            console.log('Event removed successfully:', response);
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to remove event:', error);
+        }
+    });
+
+    popover.remove();
+}
+
+function showEditForm(popover, info) {
+    var eventId = info.event.id; // Assuming the event object has an 'id' property that uniquely identifies the event
+
+    var originalContent = popover.innerHTML;
+
+    
+    // Sample dropdown options, replace these with actual surgeon IDs dynamically if needed
+    var roomOptions = `
+    <option value="">Select a room</option>
+
+        <option value="G23">G23</option>
+        <option value="G25">G25</option>
+        <option value="G27">G27</option>
+<option value="G29">G29</option>
+        <option value="G45">G45</option>
+        <option value="G47">G47</option>
+<option value="G49">G49</option>
+        <option value="G51">G51</option>
+        <option value="Lithotripsy">Lithotripsy</option>
+<option value="OPERATION ROOM 1">OPERATION ROOM 1</option>
+        <option value="OPERATION ROOM 2">OPERATION ROOM 2</option>
+        <option value="OPERATION ROOM 3">OPERATION ROOM 3</option>
+<option value="OPERATION ROOM 4">OPERATION ROOM 4</option>
+        <option value="OPERATION ROOM 5">OPERATION ROOM 5</option>
+        <option value="OPERATION ROOM 6">OPERATION ROOM 6</option>
+<option value="OPERATION ROOM 7">OPERATION ROOM 7</option>
+        <option value="OPERATION ROOM 8">OPERATION ROOM 8</option>
+<option value="OPERATION ROOM 9">OPERATION ROOM 9</option>
+        <option value="A207">A207</option>
+
+    `;
+
+var reasons = `
+    <option value="">Select a reason</option>
+
+        <option value="Emergency Cases">Emergency Cases</option>
+        <option value="Previous Surgery Overrun">Previous Surgery Overrun</option>
+        <option value="Surgeon Availability">Surgeon Availability</option>
+<option value="Equipment Availability">Equipment Availability</option>
+        <option value="Patient Readiness">Patient Readiness</option>
+        <option value="Anesthesia Issues">Anesthesia Issues</option>
+<option value="Surgical Team Availability">Surgical Team Availability</option>
+        <option value="Operating Room Availability">Operating Room Availability</option>
+        
+
+    `;
+
+
+$(document).ready(function() {
+        // Initialize surgeonOptions with the default option
+        var surgeonOptions = `<option value="">Select a surgeon</option>`;
+
+        $.ajax({
+            url: '/get_surgeon_names',
+            type: 'GET',
+            success: function(response) {
+                console.log('Response received:', response);  // Check if this logs anything
+        // Process response to update HTML content
+        if (response && response.length > 0) {
+            var surgeonOptions = `<option value="">Select a surgeon</option>`;
+            response.forEach(function(surgeon) {
+                surgeonOptions += `<option value="${surgeon.name}">${surgeon.name}</option>`;
+            });
+            $('#surgeon-id').html(surgeonOptions);  // Update select options
+        }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching surgeons:', error);
+                alert('An error occurred while fetching surgeons. Please try again.');
+            }
+        });
+    });
+
+    popover.innerHTML = `
+<div>
+<label for="edit-date">Date:</label>
+<input type="date" id="edit-date" name="edit-date">
+</div>
+<br> 
+        <div>
+            <label for="actual-start-time">Actual Start Time:</label>
+            <input type="time" id="actual-start-time" name="actual-start-time">
+        </div>
+<br>
+        <div>
+            <label for="actual-end-time">Actual End Time:</label>
+            <input type="time" id="actual-end-time" name="actual-end-time">
+        </div>
+<br>
+        <div>
+            <label>Edit Surgeon:</label>
+            <select id="choices" name="choices">
+    <option value="">Select the surgeon you want to change</option>
+    <option value="surgeon_1">Surgeon 1</option>
+    <option value="surgeon_2">Surgeon 2</option>
+
+            </select>
+<select id="surgeon-id" name="surgeon-id">
+            </select>
+        </div>
+
+<br>
+<div>
+<select id="choices2" name="choices2">
+    <option value="">Select the surgeon you want to change</option>
+    <option value="surgeon_1">Surgeon 1</option>
+    <option value="surgeon_2">Surgeon 2</option>
+
+            </select>
+<button class="suggest-button">Suggest alternative surgeon</button>
+<p id="suggestedSurgeon">
+{% if suggested_surgeon %}
+            Suggested Surgeon: {{ suggested_surgeon }}
+
+        {% endif %}
+            </p>
+</div>
+<br>
+<div>
+            <label for="room-id">Room:</label>
+            <select id="room-id" name="room-id">
+                ${roomOptions}
+            </select>
+        </div>
+<br>
+<div>
+            <label for="reason" class="required">Reason for the change:</label>
+            <select id="reason" name="reason">
+                ${reasons}
+            </select>
+        </div>
+<br>
+        <button type="button" class="close-button">&times;</button>
+
+        <button type="button" class="back-button">&lt; Back</button>
+        <button type="button" class="next-button">Next</button>
+<label class="note">(Note: the page will reload to save the changes if you clicked "Next")</label>
+    `;
+
+    // Back button functionality
+    popover.querySelector('.back-button').addEventListener('click', function() {
+        popover.innerHTML = originalContent;
+        attachPopoverEventListeners(popover, info, null); // Reattach event listeners
+    });
+popover.querySelector('.close-button').addEventListener('click', function() {
+        popover.remove();
+    });
+    
+// Extract date and time components
+    var startDateTime = info.event.start;
+    var endDateTime = info.event.end;
+startDateTime.setHours(startDateTime.getHours() + 2);
+endDateTime.setHours(endDateTime.getHours() + 2);
+    var startDateTimeISOString = startDateTime.toISOString();
+var endDateTimeISOString = endDateTime.toISOString();
+// Extract date and time parts
+var originalDate = startDateTimeISOString.split('T')[0];
+var originalStartTime = startDateTimeISOString.split('T')[1].slice(0, 5);  // "06:00"
+var originalEndTime = endDateTimeISOString.split('T')[1].slice(0, 5);  // "09:23"
+
+    var title = info.event.title
+    var doctorName1 = info.event.extendedProps.surgeon_1_name
+    var doctorName2 = info.event.extendedProps.surgeon_2_name
+
+var operationDescription = info.event.extendedProps.operation_description
+var operationType = info.event.extendedProps.operation_type
+var operationDepartment = info.event.extendedProps.department
+popover.querySelector('.suggest-button').addEventListener('click', function() {
+        var choice2 = popover.querySelector('#choices2').value; // Retrieve choice2 at the time of the click
+var operationType = info.event.extendedProps.operation_type
+var startDateTime = info.event.start;
+    var endDateTime = info.event.end;
+startDateTime.setHours(startDateTime.getHours() + 2);
+endDateTime.setHours(endDateTime.getHours() + 2);
+    var startDateTimeISOString = startDateTime.toISOString();
+var endDateTimeISOString = endDateTime.toISOString();
+// Extract date and time parts
+var originalDate = startDateTimeISOString.split('T')[0];
+var originalStartTime = startDateTimeISOString.split('T')[1].slice(0, 5);  // "06:00"
+var originalEndTime = endDateTimeISOString.split('T')[1].slice(0, 5);
+    suggestSurgeon(operationDepartment, choice2,operationType,originalDate,originalStartTime,originalEndTime);
+});
+    // Next button functionality (implement your own logic here)
+    popover.querySelector('.next-button').addEventListener('click', function() {
+        var date = popover.querySelector('#edit-date').value;
+        var actualStartTime = popover.querySelector('#actual-start-time').value;
+        var actualEndTime = popover.querySelector('#actual-end-time').value;
+        var surgeonId = popover.querySelector('#surgeon-id').value;
+        var choice1 = popover.querySelector('#choices').value;
+
+        var roomId = popover.querySelector('#room-id').value;
+        var reason = popover.querySelector('#reason').value;
+
+
+
+        var formData = {
+            eventId: eventId, // Include the event ID
+            date: date || originalDate,
+            actualStartTime: actualStartTime || originalStartTime,
+            actualEndTime: actualEndTime || originalEndTime,
+            roomId: roomId || title,
+            reason: reason || "no reason",
+            choice1:choice1,
+            originalDate: originalDate, 
+            originalStartTime: originalStartTime, 
+            originalEndTime: originalEndTime,
+            operationDescription:operationDescription,
+            originalSurgeon1:doctorName1,
+            originalSurgeon2:doctorName2, 
+            originalID1:info.event.extendedProps.surgeon_1,
+            originalID2:info.event.extendedProps.surgeon_2,
+            originalRoom: title,
+            operationType: operationType,
+            operationDepartment: operationDepartment
+
+        };
+if (surgeonId) {
+    formData.surgeonId = surgeonId;
+} else {
+        formData.surgeonId = "";
+
+}
+
+
+        fetch('/save_form_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+        location.reload();  // Reload the page to reflect changes
+                // Optionally, close the popover or perform other actions
+            } else {
+                alert('Error saving data');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred');
+        });
+    });
+    
+
+}
+
+
+function suggestSurgeon(operationDepartment, choice2,operationType,originalDate,originalStartTime,originalEndTime) {
+    var suggestedSurgeonElement = document.querySelector('#suggestedSurgeon');
+
+    var data = {
+        operationDepartment:operationDepartment,
+        choice2: choice2,
+operationType:operationType,
+originalDate:originalDate,
+originalStartTime:originalStartTime,
+originalEndTime:originalEndTime
+    };
+
+    fetch('/suggest_alternative_surgeon', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Suggested Surgeon:', data.surgeon_name); // Logging the suggested surgeon's name received from the server
+
+            // Update the HTML to show suggested surgeon name
+            if (data.surgeon_name) {
+                suggestedSurgeonElement.textContent = 'Suggested Surgeon: ' + data.surgeon_name + '    ';
+var editButton = document.createElement('button');
+            editButton.innerHTML = '&#10003;' // Check mark symbol
+            suggestedSurgeonElement.appendChild(editButton);
+
+            
+            // Set id attribute for the button
+            editButton.id = 'check';
+            }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+
+
+
+
+function initializeCalendar(item) {
+    var itemId = item.replace(/\s/g, '-'); // Replace spaces with dashes
+
+    var roomCalendarEl = document.getElementById(`room-calendar-${itemId}`);
+    var roomCalendar = new FullCalendar.Calendar(roomCalendarEl, {
+        initialView: 'timeGridDay',
+        events: function(info, successCallback, failureCallback) {
+            // Get the selected date from the date picker
+            var selectedDate = document.getElementById(`room-datepicker-${itemId}`).value;
+
+            // Check if room and date are both available
+            if (!item || !selectedDate) {
+                console.log('Room or date parameter missing');
+                return; // Exit the function without sending a request
+            }
+            
+            // Make a GET request to the Flask endpoint to fetch events for the specified room and date
+            $.ajax({
+                url: '/get_events_by_room',
+                type: 'GET',
+                data: {
+                    room: item,
+                    date: selectedDate // Include the selected date parameter
+                },
+                success: function(response) {
+                    successCallback(response); // Pass the events data to FullCalendar
+                },
+                error: function(xhr, status, error) {
+                    // Call the failure callback with the error message
+                    failureCallback('Failed to fetch events for the specified room');
+                }
+            });
+        },eventClassNames: function(arg) {
+           if (arg.event.extendedProps.submitted) {
+                return ['green-event-class'];
+            } else {
+                return ['custom-event-class'];
+            }
+        },
+        eventClick: function(info) {
+            var popover = createPopover(info, roomCalendarEl); // Pass calendarEl to createPopover
+            document.body.appendChild(popover);
+
+            var closeButton = popover.querySelector('.close-button');
+            closeButton.addEventListener('click', function() {
+                popover.remove();
+            });
+        }
+    });
+    
+    roomCalendar.render(); // Render the calendar
+
+    $(`#room-datepicker-${itemId}`).on('change', function() {
+        var roomSelectedDate = $(this).val();
+        roomCalendar.gotoDate(roomSelectedDate); // Set the calendar to the selected date
+        $(`#room-calendar-${itemId}`).removeClass('hidden'); // Show the calendar element
+    });
+}
+
+
+
+
+// Function to initialize the calendar
+function initializeDaily(selectedDate) {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridDay',
+        events: '/get_events',
+        eventClassNames: function(arg) {
+if (arg.event.extendedProps.submitted) {
+                return ['green-event-class'];
+            } else {
+                return ['custom-event-class'];
+            }
+        },
+        eventClick: function(info) {
+            var popover = createPopover(info, calendarEl); // Corrected to use calendarEl
+            document.body.appendChild(popover);
+
+            var closeButton = popover.querySelector('.close-button');
+            closeButton.addEventListener('click', function() {
+                popover.remove();
+            });
+        }
+    });
+    calendar.render(); // Render the calendar
+
+    // Set the calendar to the selected date
+    calendar.gotoDate(selectedDate);
+
+    // Show the calendar element
+    $('#calendar').removeClass('hidden');
+}
+
+// Bind the initializeCalendar function to the change event of the date picker
+$('#datepicker').on('change', function() {
+    var selectedDate = $(this).val();
+    initializeDaily(selectedDate);
+});
+   
+   function initializeWeekly(weeklyselectedDate) {
+            var weeklycalendarEl = document.getElementById('weekly-calendar-2');
+
+            // Fetch surgery count data
+            $.getJSON('/surgery_count_data')
+                .done(function(surgeryCountData) {
+                    console.log("Surgery count data fetched:", surgeryCountData); // Debugging info
+                    var events = [];
+
+                    for (const [date, rooms] of Object.entries(surgeryCountData)) {
+                        for (const [room, count] of Object.entries(rooms)) {
+                            events.push({
+                                title: `<div class="surgery-count-container">
+                    <div class="surgery-count-circle">${count}</div>
+                    <div class="surgery-room">${room}</div>
+                </div>`,
+                                start: date
+                            });
+                        }
+                    }
+
+                    var weeklycalendar = new FullCalendar.Calendar(weeklycalendarEl, {
+                        initialView: 'dayGridWeek',
+
+                        events: events, // Set events here
+                        eventContent: function(arg) {
+                            return { html: arg.event.title };
+                        }
+                    });
+                    $('#weekly-calendar-2').removeClass('hidden');
+
+                    weeklycalendar.render(); // Render the calendar
+
+                    // Set the calendar to the selected date
+                    weeklycalendar.gotoDate(weeklyselectedDate);
+
+                    // Show the calendar element
+                })
+                .fail(function(jqxhr, textStatus, error) {
+                    var err = textStatus + ", " + error;
+                    console.error("Request Failed: " + err);
+                });
+        }
+
+        // Bind the initializeWeekly function to the change event of the date picker
+        $(document).ready(function() {
+            $('#weekly-datepicker').on('change', function() {
+                var weeklyselectedDate = $(this).val();
+                initializeWeekly(weeklyselectedDate);
+            });
+        });
+
+
+</script>
+</body>
+</html>

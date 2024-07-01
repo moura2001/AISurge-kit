@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlSurgeKit</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="icon" href="https://i.postimg.cc/NjRpXSm3/favicon-438.png" target="_blank" type="image/png" sizes="512x512">
+
+<style>
+:root {
+            --primary-color: #007bff;
+            --secondary-color: #000;
+            --highlight-color: #ffffff;
+            --background-image-url: url('https://i.postimg.cc/Dfbstc6p/Milstone-Hero12000.jpg');
+            --font-family: Arial, sans-serif;
+            --label-font-size: 1.5rem;
+            --section-bg-color: #86B6F6;
+            --card1-color: #8E3E63;
+            --card2-color: #D2649A;
+            --card3-color: #AD88C6;
+            --card4-color: #640D6B;
+            --card5-color: #176B87;
+            --card6-color: #640D6B;
+        }
+
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family), sans-serif;
+            background-color: #111;
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background: var(--background-image-url) no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(15px); /* Add blur effect */
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 5vh;
+            text-align: center;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 20px;
+            z-index: 1;
+            color: var(--secondary-color);
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 4rem;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 20px;
+            animation: appearTitle 3s forwards;
+            opacity: 0;
+        }
+
+        @keyframes appearTitle {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .description {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            font-weight: normal;
+            color: #ffffff;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: appearDescription 4s forwards;
+            opacity: 0;
+        }
+
+        @keyframes appearDescription {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        p {
+            color: var(--secondary-color);
+            margin-top: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #007bff; /* Blue background color */
+           color: #ffffff; /* White text color */
+            text-decoration: none;
+            border-radius: 50px;
+            margin-top: 30px;
+            transition: background-color 0.3s ease;
+            font-size: 1.2rem;
+            animation: appearButton 5s forwards;
+            opacity: 0;
+        }
+
+        @keyframes appearButton {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button:hover {
+            background-color: #0056b3;
+        }
+
+
+        .faq-title {
+            margin-bottom: 10px;
+        }
+
+        .faq-card {
+            background-color: #f9f9f9;
+            color: #333;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .faq-card:first-child {
+            margin-top: 30px;
+        }
+
+        .faq-card:hover {
+            transform: scale(1.01);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            color: #000;
+        }
+
+        .card-header {
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header:hover {
+            background-color: #f0f0f0;
+        }
+
+        .card-header::after {
+            content: '\002B';
+            font-size: 1.25rem;
+            color: inherit;
+            transition: transform 0.3s ease;
+        }
+
+        .card-header.active::after {
+            content: '\2212';
+            transform: rotate(180deg);
+        }
+
+        .faq-card:nth-child(1) .card-header {
+            color: #a64d79;
+        }
+
+        .faq-card:nth-child(2) .card-header {
+            color: #e68699;
+        }
+
+        .faq-card:nth-child(3) .card-header {
+            color: #aa8dc3;
+        }
+
+        .faq-card:nth-child(4) .card-header {
+            color: #613d75;
+        }
+
+        .faq-card:nth-child(5) .card-header {
+            color: #850f8d;
+        }
+
+        .faq-card:nth-child(6) .card-header {
+            color: #d2649a;
+        }
+
+        .section-title {
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .card-header {
+                font-size: 1.1rem;
+                padding: 15px;
+            }
+
+            .faq-answer {
+                padding: 15px;
+            }
+        }
+
+        .top-buttons {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 2;
+            padding: 10px 0;
+            margin: 0;
+            backdrop-filter: blur(10px);
+            background: transparent;
+        }
+
+        .label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--highlight-color);
+            margin: 0 15px;
+            transition: font-size 0.3s ease, color 0.3s ease;
+        }
+
+        .label:hover,
+        .label.active {
+            color: var(--primary-color);
+        }
+
+        .label.active {
+            font-size: 1.5rem;
+        }
+
+        .highlight {
+            color: var(--highlight-color);
+            font-weight: bold;
+        }
+
+        .separator {
+            color: #fff;
+            margin: 0 10px;
+        }
+
+        section {
+            background-color: var(--section-bg-color);
+            padding: 50px 0;
+            text-align: center;
+            color: #000;
+        }
+
+        #Home {
+            background: var(--background-image-url) no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            padding-top: 10px;
+            padding-bottom: 100px;
+            text-align: center;
+        }
+
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+}
+
+.card i {
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+#Benefits {
+    background-color: var(--section-bg-color);
+    padding: 50px 0;
+    text-align: center;
+    color: var(--secondary-color);
+    margin-bottom: 100px;
+}
+
+#Benefits h2 {
+    color: var(--highlight-color);
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+}
+
+        #About,
+        #Core,
+        #Benefits,
+        #Contact,
+        #OurTeam {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 50px;
+        }
+
+        #About h2,
+        #Core h2,
+        #Benefits h2,
+        #Contact h2,
+        #OurTeam h2 {
+            font-size: 2rem;
+        }
+
+        #About p,
+        #Core p,
+        #Benefits p,
+        #Contact p,
+        #OurTeam p {
+            font-size: 1.5rem;
+        }
+section {
+    padding: 50px 0;
+    text-align: center;
+}
+
+#About, #Core, #Main, #Benefits, #FAQ, #OurTeam, #Contact {
+    background: linear-gradient(to right, #56ccf2, #2f80ed);
+}
+
+
+        #Main {
+            background-color: #86B6F6;
+            padding: 50px 0;
+            text-align: center;
+            color: #000;
+            margin-top: 100px;
+            margin-bottom: 100px;
+        }
+
+        #Main h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        #Main p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+
+        .features-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .feature {
+            background-color: #fff;
+            color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex-basis: calc(25% - 40px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feature img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .feature-text {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card1 {
+            color: var(--card1-color);
+        }
+
+        .card2 {
+            color: var(--card2-color);
+        }
+
+        .card3 {
+            color: var(--card3-color);
+        }
+
+        .card4 {
+            color: var(--card4-color);
+        }
+
+        .card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        :root {
+            --primary-color: #86B6F6;
+            --secondary-color: #fff;
+            --text-color: #000;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        #OurTeam {
+            background-color: var(--primary-color);
+            padding: 50px 0;
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 100px;
+        }
+
+        #OurTeam h2 {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .team-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+
+        .team-member {
+            text-align: center;
+            flex: 1 0 200px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .team-member h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+
+        .team-member p {
+            margin: 5px 0;
+            color: var(--text-color);
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .team-container {
+                flex-direction: column;
+            }
+
+            .team-member {
+                flex-basis: 100%;
+            }
+        }
+
+        #Contact {
+            margin-top: 100px;
+        }
+
+        #Core {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 100px;
+        }
+
+        p {
+            color: var(--text-color);
+        }
+</style>
+</head>
+
+<body>
+    <div class="top-buttons">
+        <div class="label active" onclick="scrollToSection('Home')">Home</div>
+        <div class="separator">|</div>
+        <div class="label" onclick="scrollToSection('About')">About</div>
+        <div class="separator">|</div>
+        <div class="label" onclick="scrollToSection('Core')">Core Services</div>
+        <div class="separator">|</div>
+        <div class="label" onclick="scrollToSection('Main')">Main Features</div>
+        <div class="separator">|</div>
+        <div class="label" onclick="scrollToSection('Benefits')">Benefits</div>
+        <div class="separator">|</div>
+        <div class="label" onclick="scrollToSection('FAQ')">FAQ</div>
+        <div class="separator">|</div>
+        <div class="label" onclick="scrollToSection('OurTeam')">Our Team</div>
+        <div class="separator">|</div>
+        <div class="label" onclick="scrollToSection('Contact')">Contact</div>
+    </div>
+
+    <div class="background-image"></div>
+
+    <div id="Home">
+        <div class="overlay">
+            <div class="container">
+                <h1>Welcome to AlSurgeKit</h1>
+                <p class="description">Streamline your surgical scheduling process with the power of artificial intelligence.</p>
+                <a href="request.html" class="cta-button">Request a Demo</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="About">
+        <h2 style="color: white; font-weight: bold; font-size: 2.5rem;">About Us</h2>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+            <div style="flex: 1;">
+                <p><span style="font-weight: bold; color: white; font-size: 2rem;">What we do?</span></p>
+                <p style="font-size: 1.2rem;">AIsurgekit uses AI technology to revolutionize surgery, increasing efficiency, revenue, and reducing cancellations. It streamlines scheduling, optimizes resources, and provides predictive insights. This platform elevates patient outcomes, operational efficiency, and redefines the surgical care standard.</p>
+            </div>
+            <div style="flex: 1;">
+                <p><span style="font-weight: bold; color: white; font-size: 2rem;">What we are?</span></p>
+                <p style="font-size: 1.2rem;">AIsurgekit is reshaping surgical practices and revolutionizing surgery with cutting-edge AI. As seniors in Biomedical Informatics at Nile University, we are dedicated to optimizing operating room schedules to improve efficiency and enhance global healthcare outcomes.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="Core" style="background-color: #86B6F6; padding: 50px 0; text-align: center; color: #fff; margin-bottom: 100px;">
+        <div class="container">
+            <h2 style="color: white; font-weight: bold;">Core Services</h2>
+            <p>We offer a wide range of core services to meet all your medical needs.</p>
+        </div>
+    </section>
+
+<section id="Main" style="background-color: #86B6F6; padding: 50px 0;">
+    <div class="container" style="max-width: 1200px; margin: 0 auto;">
+        <h2 style="text-align: center; font-weight: bold; color: #fff;">Main Features</h2>
+        <p style="text-align: center; margin-bottom: 40px; color: #000;">Discover the main features of our intelligent system.</p>
+        <div class="card-deck" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+            <div class="card feature" style="flex: 0 1 30%; margin-bottom: 20px; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <img src="https://i.postimg.cc/PfCyJfvR/tecnologia-ergonomia-quirofanos-pic01-20230804-tedisel-medical-1170x656.jpg" alt="Predictive Scheduling" style="border-radius: 10px 10px 0 0; width: 100%;">
+                <div class="feature-text" style="padding: 20px;">
+                    <h3 class="card1" style="font-weight: bold;">Daily, Weekly and room schedule </h3>
+                    <p style="color: #000;">Creating a comprehensive schedule with AI involves structuring daily, weekly, and room-specific tasks to maximize productivity and organization. AI optimizes these schedules by analyzing patterns, predicting conflicts, and providing personalized recommendations, ensuring a balanced and efficient use of time and space.</p>
+                </div>
+            </div>
+            <div class="card feature" style="flex: 0 1 30%; margin-bottom: 20px; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <img src="https://i.postimg.cc/QNvbTLpx/image-01-fileadmin-assets-tu-wien-news-2023-kuenstliche-intelligenz-ai-im-krankenhaus.jpg" alt="ICU Management" style="border-radius: 10px 10px 0 0; width: 100%;">
+                <div class="feature-text" style="padding: 20px;">
+                    <h3 class="card2" style="font-weight: bold;">ICU Management</h3>
+                    <p style="color: #000;">An efficient ICU management module leverages advanced algorithms and real-time patient data analysis to determine whether a patient requires intensive care. This capability enhances the allocation of ICU resources, improves patient outcomes, and increases overall healthcare efficiency by ensuring that critical care is provided appropriately based on each patient's condition.</p>
+                </div>
+            </div>
+            <div class="card feature" style="flex: 0 1 30%; margin-bottom: 20px; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <img src="https://i.postimg.cc/T1Xh7kxZ/istockphoto-1473149946-170667a.webp" alt="Turnover Optimization" style="border-radius: 10px 10px 0 0; width: 100%;">
+                <div class="feature-text" style="padding: 20px;">
+                    <h3 class="card3" style="font-weight: bold;">Turnover Optimization</h3>
+                    <p style="color: #000;">Optimizing turnover times between surgeries involves using data analysis to streamline processes, minimize idle time, and enhance efficiency in surgical settings. By improving room setup, team coordination, and patient preparation, healthcare facilities can reduce delays, utilize resources more effectively, and improve both operational outcomes and patient satisfaction.</p>
+                </div>
+            </div>
+            <div class="card feature" style="flex: 0 1 30%; margin-bottom: 20px; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <img src="https://i.postimg.cc/25HdjgkY/AI-Symposium-Feat.jpg" alt="Doctor Preference" style="border-radius: 10px 10px 0 0; width: 100%;">
+                <div class="feature-text" style="padding: 20px;">
+                    <h3 class="card4" style="font-weight: bold;">Doctor Preferences</h3>
+                    <p style="color: #000;">Customizing surgical schedules based on doctor preferences not only enhances workflow and medical staff satisfaction but also effectively manages cancellations or absences by suggesting alternate doctors aligned with their preferences. This approach optimizes surgical team coordination and maintains efficient patient care delivery.</p>
+                </div>
+            </div>
+            <div class="card feature" style="flex: 0 1 30%; margin-bottom: 20px; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <img src="https://i.postimg.cc/0yLv0zP4/1699376014025.jpg" alt="Performance Report" style="border-radius: 10px 10px 0 0; width: 100%;">
+                <div class="feature-text" style="padding: 20px;">
+                    <h3 class="card5" style="font-weight: bold; color: #8E3E63;">Performance Report</h3>
+                    <p style="color: #000;">Improve and track the performance of daily operations. Monitor which surgeries were completed, which were not, and which were canceled. This feature helps maintain and oversee surgical procedures, ensuring efficient and effective management of hospital operations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    
+<section id="Benefits" style="background-color: #86B6F6; padding: 50px 0; text-align: center; color: #000; margin-bottom: 100px;">
+    <div class="container">
+        <h2 style="color: white; font-weight: bold; margin-bottom: 30px;">Benefits</h2>
+        <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 0 20px;">
+            <div class="card card1" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;">
+                <i class="fas fa-cogs fa-3x" style="color: var(--card1-color); margin-bottom: 15px;"></i>
+                <h3 style="color: var(--card1-color); font-size: 1.5em; margin-bottom: 15px;">Efficiency</h3>
+                <p>Optimize every aspect of your operating theatre, from scheduling to execution.</p>
+            </div>
+            <div class="card card2" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;">
+                <i class="fas fa-chart-line fa-3x" style="color: var(--card2-color); margin-bottom: 15px;"></i>
+                <h3 style="color: var(--card2-color); font-size: 1.5em; margin-bottom: 15px;">Predictive Insights</h3>
+                <p>Utilize AI-driven insights to foresee and address potential challenges.</p>
+            </div>
+            <div class="card card3" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;">
+                <i class="fas fa-database fa-3x" style="color: var(--card3-color); margin-bottom: 15px;"></i>
+                <h3 style="color: var(--card3-color); font-size: 1.5em; margin-bottom: 15px;">Resource Management</h3>
+                <p>Ensure optimal use of resources with intelligent predictions and planning.</p>
+            </div>
+            <div class="card card4" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;">
+                <i class="fas fa-smile fa-3x" style="color: var(--card4-color); margin-bottom: 15px;"></i>
+                <h3 style="color: var(--card4-color); font-size: 1.5em; margin-bottom: 15px;">Patient Satisfaction</h3>
+                <p>Reduce wait times and enhance patient care quality through streamlined operations.</p>
+            </div>
+            <div class="card card5" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;">
+                <i class="fas fa-dollar-sign fa-3x" style="color: var(--card5-color); margin-bottom: 15px;"></i>
+                <h3 style="color: var(--card5-color); font-size: 1.5em; margin-bottom: 15px;">Cost Savings</h3>
+                <p>Reduce operational costs through improved efficiency and resource management.</p>
+            </div>
+            <div class="card card6" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;">
+                <i class="fas fa-expand fa-3x" style="color: var(--card6-color); margin-bottom: 15px;"></i>
+                <h3 style="color: var(--card6-color); font-size: 1.5em; margin-bottom: 15px;">Scalability</h3>
+                <p>Easily scale your operations to meet increasing demand without sacrificing quality.</p>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
+
+
+
+    <section id="FAQ" style="background-color: #86B6F6; padding: 50px 0; color: #000; margin-bottom: 100px;">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title" style="color: white; font-weight: bold; text-align: center; padding-left: 30%;">FREQUENTLY ASKED QUESTIONS</h2>
+            <div class="faq-card card" style="text-align: left;">
+                <div class="card-header bg-primary text-white" onclick="toggleAnswer(1)">
+                    Q: What is AIsurgekit and how does it work?
+                </div>
+                <div class="faq-answer card-body" id="answer1">
+                    A: AIsurgekit integrates advanced AI-driven capabilities to transform surgical practices by optimizing scheduling, resource allocation, and providing predictive insights. It offers comprehensive daily,weekly and room schedule management for surgeries, including handling cancellations or absences by suggesting alternate doctors aligned with their preferences. Utilizing historical data and surgeon-specific preferences, AIsurgekit ensures efficient ICU management, reduced turnover times, and personalized resource plans across various surgical specialties. Its user-friendly interface and customizable features enhance workflow efficiency, staff satisfaction, and overall operational effectiveness in healthcare facilities.
+                </div>
+            </div>
+            <div class="faq-card card" style="text-align: left;">
+                <div class="card-header bg-primary text-white" onclick="toggleAnswer(2)">
+                    Q: How does AIsurgekit use AI technology to optimize surgical scheduling?
+                </div>
+                <div class="faq-answer card-body" id="answer2">
+                    A: AIsurgekit optimizes surgical scheduling by analyzing diverse data points like historical surgical data, patient demographics, team availability, and resource needs. Its AI algorithms accurately predict surgery durations, considering factors such as procedure complexity and surgeon proficiency. Through optimization, AIsurgekit minimizes idle time, overbooking, and ensures efficient resource allocation. Customization options cater to various specialties and facilities, allowing surgeons to input preferences. It offers predictive insights to anticipate scheduling challenges and make proactive adjustments, enhancing overall efficiency and reducing disruptions.
+                </div>
+            </div>
+            <div class="faq-card card" style="text-align: left;">
+                <div class="card-header bg-primary text-white" onclick="toggleAnswer(3)">
+                    Q: What predictive insights does AIsurgekit provide for surgical procedures?
+                </div>
+                <div class="faq-answer card-body" id="answer3">
+                    A: AIsurgekit leverages advanced AI algorithms to provide predictive insights for surgical procedures. It accurately forecasts surgery durations by considering factors like procedure complexity, patient characteristics, and historical data. Moreover, AIsurgekit predicts resource requirements, ICU utilization, and turnover times between surgeries. These insights empower surgical teams to anticipate challenges, optimize resource allocation, and proactively address issues during the surgical process.
+                </div>
+            </div>
+            <div class="faq-card card" style="text-align: left;">
+                <div class="card-header bg-primary text-white" onclick="toggleAnswer(4)">
+                    Q: Is AIsurgekit customizable to fit the needs of different surgical specialties?
+                </div>
+                <div class="faq-answer card-body" id="answer4">
+                    A: Yes, AIsurgekit is highly customizable, catering to the unique needs of various surgical specialties. It offers flexible configuration options for surgical teams to tailor the system to their workflows, preferences, and priorities. Surgeons can customize scheduling parameters, resource allocation rules, and optimization algorithms to align with their specialty's practices and protocols. This adaptability spans across specialties like orthopedic surgery, neurosurgery, cardiovascular surgery, enabling efficiency optimization and improved patient care outcomes.
+                </div>
+            </div>
+            <div class="faq-card card" style="text-align: left;">
+                <div class="card-header bg-primary text-white" onclick="toggleAnswer(5)">
+                    Q: What sets AIsurgekit apart from other surgical management solutions?
+                </div>
+                <div class="faq-answer card-body" id="answer5">
+                    A: AIsurgekit is an advanced surgical management solution driven by AI, offering customizable features, predictive insights, and a user-friendly interface. It optimizes surgical scheduling and resource allocation across various specialties, enhancing patient outcomes by reducing delays and cancellations. With its focus on adaptability and efficiency, AIsurgekit revolutionizes surgical practices, ensuring seamless operations and improved satisfaction for both medical staff and patients.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="OurTeam" style="background-color: #86B6F6; padding: 50px 0; text-align: center; color: #fff; margin-bottom: 100px;">
+        <div class="container">
+            <h2 style="color: white; font-weight: bold;"> Meet Our Team</h2>
+            <div class="team-container" style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; padding: 0 20px;">
+                <div class="team-member">
+                    <img src=https://i.postimg.cc/fTZn7xrY/1-photo-added.jpg" alt="Moura Saber">
+                    <h3>Moura Saber</h3>
+                    <p>Senior Student</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://i.postimg.cc/QMpMHkMk/shared-image.jpg" alt="Mary Nazeh">
+                    <h3>Mary Nazeh</h3>
+                    <p>Senior Student</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://i.postimg.cc/8cnpqZyD/Selected-photo-3.jpg" alt="Micheal William">
+                    <h3>Micheal William</h3>
+                    <p>Senior Student</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://i.postimg.cc/Xqs5gzJL/1-photo-added-1.jpg" alt="Mariam Hany">
+                    <h3>Mariam Hany</h3>
+                    <p>Senior Student</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://i.postimg.cc/NMqrnjKb/2-photos-added.jpg" alt="Trevena Ayman">
+                    <h3>Trevena Ayman</h3>
+                    <p>Senior Student</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="Contact" style="background-color: #86B6F6; padding: 50px 0; text-align: center; color: #fff; margin-top: 200px; margin-bottom: 0px;">
+    <div class="container">
+        <h2 style="color: white; font-weight: bold;">Contact Us</h2>
+        <p>We would love to hear from you. Please reach out to us with any questions or inquiries.</p>
+        <p style="font-size: 1.2rem; margin-bottom: 20px;">Email: <a href="mailto:infoAISurge@outlook.com" style="color: #fff;">infoAISurge@outlook.com</a></p>
+        <p style="font-size: 1.2rem; margin-bottom: 20px;">Location: Nile University, Egypt</p>
+
+        <div style="margin-top: 30px;">
+            <a href="https://www.facebook.com" target="_blank" style="color: #fff; margin: 0 10px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" style="width: 30px; vertical-align: middle;">
+            </a>
+            <a href="https://www.instagram.com" target="_blank" style="color: #fff; margin: 0 10px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram" style="width: 30px; vertical-align: middle;">
+            </a>
+            <a href="https://twitter.com" target="_blank" style="color: #fff; margin: 0 10px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" style="width: 30px; vertical-align: middle;">
+            </a>
+            <a href="https://www.github.com" target="_blank" style="color: #fff; margin: 0 10px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733609.png" alt="Github" style="width: 30px; vertical-align: middle;">
+            </a>
+            <a href="https://www.skype.com" target="_blank" style="color: #fff; margin: 0 10px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733610.png" alt="Skype" style="width: 30px; vertical-align: middle;">
+            </a>
+        </div>
+
+        <p style="margin-top: 30px; font-size: 0.9rem; color: #fff;">&copy; 2024 AlSurgeKit. All Rights Reserved.</p>
+    </div>
+</section>
+
+    <script>
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        document.querySelectorAll('.label').forEach(label => {
+            label.addEventListener('click', function () {
+                document.querySelectorAll('.label').forEach(label => {
+                    label.classList.remove('active');
+                });
+
+                this.classList.add('active');
+            });
+        });
+
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById('answer' + answerId);
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+            } else {
+                answer.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

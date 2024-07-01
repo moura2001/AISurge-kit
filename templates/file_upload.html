@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://i.postimg.cc/NjRpXSm3/favicon-438.png" target="_blank" type="image/png" sizes="512x512">
+
+    <title>File Upload</title>
+<style>
+    body {
+    background: linear-gradient(to bottom, #0079BF, white);
+        
+        background-repeat: repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        
+    }
+</style>
+<style>
+        
+        .login-container {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+
+        .login-form {
+            max-width: 1000px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+
+        .login-form label {
+            font-weight: bold;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .login-form button {
+            background-color: #0e75b0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-form button:hover {
+            opacity: 0.8;
+        }
+.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed; /* Change cursor to not-allowed */
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-form">
+        <h2>Upload the waiting list file</h2>
+        <form id="uploadForm" action="/file_upload.html" method="post" enctype="multipart/form-data">
+            <input type="file" name="fileUpload" id="fileUpload">
+            <button type="button" id="submitButton" onclick="submitForm()">Next</button><br>
+            <button type="button" id="existsss" onclick="handleButtonClick()">Already exists</button></a>
+
+        </form>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+window.onload = function() {
+        var isButtonDisabled = sessionStorage.getItem('isButtonDisabled');
+
+        if (isButtonDisabled === 'true') {
+            // Disable the button if previously disabled
+            document.getElementById('submitButton').classList.add('disabled');
+            document.getElementById('existsss').classList.add('disabled');
+
+        } else {
+            // Enable the button if it's not disabled
+            document.getElementById('submitButton').classList.remove('disabled');
+            document.getElementById('existsss').classList.remove('disabled');
+
+        }
+    };
+
+    // Perform any file upload operations here
+    function submitForm() {
+        // Trigger form submission
+            document.getElementById('submitButton').classList.add('disabled');
+            document.getElementById('existsss').classList.add('disabled');
+        sessionStorage.setItem('isButtonDisabled', 'true');
+
+        document.getElementById('uploadForm').submit();
+
+    }
+function handleButtonClick() {
+        // Perform JavaScript action
+
+        // Navigate to the URL
+        window.location.href = "{{ url_for('already_exists') }}";
+    }
+    
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+        // Prevent the default form submission behavior
+
+        event.preventDefault();
+    });
+</script>
+</body>
+</html>
